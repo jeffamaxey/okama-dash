@@ -101,11 +101,13 @@ def prepare_ef(ef: pd.DataFrame, ef_object: okama.EfficientFrontier, ef_options:
         fig.add_trace(
             go.Scatter(
                 x=df["Risk"],
-                y=df["Return"] if ef_options["plot_type"] == "Arithmetic" else df["CAGR"],
+                y=df["Return"]
+                if ef_options["plot_type"] == "Arithmetic"
+                else df["CAGR"],
                 customdata=weights_array,
                 hovertemplate="Risk: %{x:.2f}%<br>Return: %{y:.2}%",
                 mode="markers",
-                name=f"Monte-Carlo Simulation",
+                name="Monte-Carlo Simulation",
             )
         )
     # X and Y titles

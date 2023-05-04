@@ -33,7 +33,7 @@ def benchmark_card_controls(
     ccy: Optional[str],
 ):
     tickers_list = make_list_from_string(tickers)
-    card = dbc.Card(
+    return dbc.Card(
         dbc.CardBody(
             [
                 html.H5("Compare with Benchmark", className="card-title"),
@@ -49,7 +49,9 @@ def benchmark_card_controls(
                                             multi=False,
                                             placeholder="Select a benchmark",
                                             id="select-benchmark",
-                                            value=benchmark if benchmark else settings.default_benchmark
+                                            value=benchmark
+                                            if benchmark
+                                            else settings.default_benchmark,
                                         ),
                                     ],
                                     lg=6,
@@ -65,7 +67,9 @@ def benchmark_card_controls(
                         html.Label("Tickers to compare with benchmark"),
                         dcc.Dropdown(
                             options=options,
-                            value=tickers_list if tickers_list else settings.default_symbols_benchmark,
+                            value=tickers_list
+                            if tickers_list
+                            else settings.default_symbols_benchmark,
                             multi=True,
                             placeholder="Select tickers",
                             id="benchmark-assets-list",
@@ -94,7 +98,9 @@ def benchmark_card_controls(
                                         html.Label("First Date"),
                                         dbc.Input(
                                             id="benchmark-first-date",
-                                            value=first_date if first_date else "2000-01",
+                                            value=first_date
+                                            if first_date
+                                            else "2000-01",
                                             type="text",
                                         ),
                                         dbc.FormText("Format: YYYY-MM"),
@@ -105,7 +111,9 @@ def benchmark_card_controls(
                                         html.Label("Last Date"),
                                         dbc.Input(
                                             id="benchmark-last-date",
-                                            value=last_date if last_date else today_str,
+                                            value=last_date
+                                            if last_date
+                                            else today_str,
                                             type="text",
                                         ),
                                         dbc.FormText("Format: YYYY-MM"),
@@ -138,13 +146,30 @@ def benchmark_card_controls(
                                         ),
                                         dbc.RadioItems(
                                             options=[
-                                                {"label": "Tracking difference", "value": "td"},
-                                                {"label": "Annualized Tracking difference", "value": "annualized_td"},
-                                                {"label": "Annual Tracking difference (bars)", "value": "annual_td_bar"},
-                                                {"label": "Tracking Error", "value": "te"},
-                                                {"label": "Correlation", "value": "correlation"},
-                                                {"label": "Beta coefficient", "value": "beta"},
-
+                                                {
+                                                    "label": "Tracking difference",
+                                                    "value": "td",
+                                                },
+                                                {
+                                                    "label": "Annualized Tracking difference",
+                                                    "value": "annualized_td",
+                                                },
+                                                {
+                                                    "label": "Annual Tracking difference (bars)",
+                                                    "value": "annual_td_bar",
+                                                },
+                                                {
+                                                    "label": "Tracking Error",
+                                                    "value": "te",
+                                                },
+                                                {
+                                                    "label": "Correlation",
+                                                    "value": "correlation",
+                                                },
+                                                {
+                                                    "label": "Beta coefficient",
+                                                    "value": "beta",
+                                                },
                                             ],
                                             value="annualized_td",
                                             id="benchmark-plot-option",
@@ -176,8 +201,14 @@ def benchmark_card_controls(
                                         ),
                                         dbc.RadioItems(
                                             options=[
-                                                {"label": "Expanding", "value": "expanding"},
-                                                {"label": "Rolling", "value": "rolling"},
+                                                {
+                                                    "label": "Expanding",
+                                                    "value": "expanding",
+                                                },
+                                                {
+                                                    "label": "Rolling",
+                                                    "value": "rolling",
+                                                },
                                             ],
                                             value="expanding",
                                             id="benchmark-chart-expanding-rolling",
@@ -197,7 +228,9 @@ def benchmark_card_controls(
                                             value=2,
                                             id="benchmark-rolling-window",
                                         ),
-                                        dbc.FormText("Format: number of years (≥ 1)"),
+                                        dbc.FormText(
+                                            "Format: number of years (≥ 1)"
+                                        ),
                                         dbc.Tooltip(
                                             benchmark_options_tooltip_window_size,
                                             target="benchmark-info-rolling",
@@ -210,7 +243,7 @@ def benchmark_card_controls(
                                 ),
                             ]
                         ),
-                    ]
+                    ],
                 ),
                 html.Div(
                     [
@@ -228,7 +261,6 @@ def benchmark_card_controls(
         ),
         class_name="mb-3",
     )
-    return card
 
 
 @callback(
@@ -238,7 +270,7 @@ def benchmark_card_controls(
 )
 def disable_rolling_input(plot_options: str, expanding_rolling):
     condition1 = expanding_rolling == "expanding"
-    condition2 = plot_options in ("annual_td_bar", "te", "beta")
+    condition2 = plot_options in {"annual_td_bar", "te", "beta"}
     return condition1 or condition2
 
 
@@ -249,7 +281,7 @@ def disable_rolling_input(plot_options: str, expanding_rolling):
     Input("benchmark-chart-expanding-rolling", "value"),
 )
 def disable_rolling_expanding_switch(plot_options: str, radio_switch_value):
-    disabled = True if plot_options in ("annual_td_bar", "te", "beta") else False
+    disabled = plot_options in {"annual_td_bar", "te", "beta"}
     radio_options = [
         {"label": "Expanding", "value": "expanding"},
         {"label": "Rolling", "value": "rolling", "disabled": disabled}
@@ -290,13 +322,9 @@ def update_link_benchmark(n_clicks,
 )
 def optimize_search_benchmark(search_value, selected_value):
     if search_value:
-        ls = [o for o in options if re.match(search_value, o, re.IGNORECASE)]
+        return [o for o in options if re.match(search_value, o, re.IGNORECASE)]
     else:
-        if selected_value:
-            ls = [selected_value]
-        else:
-            ls = [settings.default_benchmark]
-    return ls
+        return [selected_value] if selected_value else [settings.default_benchmark]
 
 
 @app.callback(

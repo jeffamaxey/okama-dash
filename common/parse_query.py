@@ -11,7 +11,6 @@ def make_list_from_string(symbols: Optional[str], char_type: str = "str") -> Opt
     if symbols:
         tickers_io = io.StringIO(symbols)
         df = pd.read_csv(tickers_io, header=None, dtype=char_type)
-        result = df.iloc[0, :].to_list()
+        return df.iloc[0, :].to_list()
     else:
-        result = None
-    return result
+        return None

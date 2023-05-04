@@ -30,9 +30,11 @@ dash.register_page(
 
 
 def layout():
-    page = dbc.Container(
+    return dbc.Container(
         [
-            dbc.Row(dbc.Col(card_db_search_controls, width=12), align="center"),
+            dbc.Row(
+                dbc.Col(card_db_search_controls, width=12), align="center"
+            ),
             dbc.Row(dbc.Col(card_db_search_results, width=12), align="center"),
             dbc.Row(dbc.Col(card_db_namespaces, width=12), align="center"),
             dbc.Row(dbc.Col(card_db_description, width=12), align="left"),
@@ -40,4 +42,3 @@ def layout():
         class_name="mt-2",
         fluid="md",
     )
-    return page

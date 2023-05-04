@@ -35,7 +35,7 @@ def card_controls(
     ccy: Optional[str],
 ):
     tickers_list = make_list_from_string(tickers)
-    card = dbc.Card(
+    return dbc.Card(
         dbc.CardBody(
             [
                 html.H5("Compare Assets", className="card-title"),
@@ -44,7 +44,9 @@ def card_controls(
                         html.Label("Tickers to compare"),
                         dcc.Dropdown(
                             options=options,
-                            value=tickers_list if tickers_list else settings.default_symbols,
+                            value=tickers_list
+                            if tickers_list
+                            else settings.default_symbols,
                             multi=True,
                             placeholder="Select assets",
                             id="al-symbols-list",
@@ -72,7 +74,9 @@ def card_controls(
                                         html.Label("First Date"),
                                         dbc.Input(
                                             id="al-first-date",
-                                            value=first_date if first_date else "2000-01",
+                                            value=first_date
+                                            if first_date
+                                            else "2000-01",
                                             type="text",
                                         ),
                                         dbc.FormText("Format: YYYY-MM"),
@@ -83,7 +87,9 @@ def card_controls(
                                         html.Label("Last Date"),
                                         dbc.Input(
                                             id="al-last-date",
-                                            value=last_date if last_date else today_str,
+                                            value=last_date
+                                            if last_date
+                                            else today_str,
                                             type="text",
                                         ),
                                         dbc.FormText("Format: YYYY-MM"),
@@ -116,10 +122,22 @@ def card_controls(
                                         ),
                                         dbc.RadioItems(
                                             options=[
-                                                {"label": "Wealth Index", "value": "wealth"},
-                                                {"label": "Rolling Cagr", "value": "cagr"},
-                                                {"label": "Rolling Real Cagr", "value": "real_cagr"},
-                                                {"label": "Correlation matrix", "value": "correlation"},
+                                                {
+                                                    "label": "Wealth Index",
+                                                    "value": "wealth",
+                                                },
+                                                {
+                                                    "label": "Rolling Cagr",
+                                                    "value": "cagr",
+                                                },
+                                                {
+                                                    "label": "Rolling Real Cagr",
+                                                    "value": "real_cagr",
+                                                },
+                                                {
+                                                    "label": "Correlation matrix",
+                                                    "value": "correlation",
+                                                },
                                             ],
                                             value="wealth",
                                             id="al-plot-option",
@@ -177,7 +195,9 @@ def card_controls(
                                             value=2,
                                             id="al-rolling-window",
                                         ),
-                                        dbc.FormText("Format: number of years (≥ 1)"),
+                                        dbc.FormText(
+                                            "Format: number of years (≥ 1)"
+                                        ),
                                         dbc.Tooltip(
                                             al_options_window,
                                             target="al-info-rolling",
@@ -208,7 +228,6 @@ def card_controls(
         ),
         class_name="mb-3",
     )
-    return card
 
 
 @callback(
@@ -216,7 +235,7 @@ def card_controls(
     Input(component_id="al-plot-option", component_property="value"),
 )
 def update_rolling_input(plot_options: str):
-    return plot_options in ("wealth", "correlation")
+    return plot_options in {"wealth", "correlation"}
 
 
 @callback(
@@ -269,7 +288,7 @@ def optimize_search_al(search_value, selected_values):
     State(component_id="al-plot-option", component_property="value"),
 )
 def show_log_scale_switch(n_clicks, plot_type: str):
-    return False if plot_type in ("wealth", "cagr", "real_cagr") else True
+    return plot_type not in ("wealth", "cagr", "real_cagr")
 
 
 @app.callback(

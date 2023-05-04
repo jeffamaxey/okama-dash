@@ -27,6 +27,6 @@ def check_if_list_empty_or_big(tickers_list) -> bool:
     - number of tickers is more than allowed (in settings)
     """
     tickers_list = [i for i in tickers_list if i is not None]
-    condition1 = len(tickers_list) == 0
+    condition1 = not tickers_list
     condition2 = len(tickers_list) > settings.ALLOWED_NUMBER_OF_TICKERS
     return condition1 or condition2

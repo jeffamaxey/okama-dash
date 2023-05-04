@@ -29,21 +29,27 @@ dash.register_page(
 
 
 def layout(benchmark=None, tickers=None, first_date=None, last_date=None, ccy=None, **kwargs):
-    page = dbc.Container(
+    return dbc.Container(
         [
             dbc.Row(
                 [
-                    dbc.Col(benchmark_card_controls(benchmark, tickers, first_date, last_date, ccy), lg=7),
+                    dbc.Col(
+                        benchmark_card_controls(
+                            benchmark, tickers, first_date, last_date, ccy
+                        ),
+                        lg=7,
+                    ),
                     dbc.Col(card_benchmark_info, lg=5),
                 ]
             ),
             dbc.Row(dbc.Col(card_graf_benchmark, width=12), align="center"),
-            dbc.Row(dbc.Col(card_benchmark_description, width=12), align="left"),
+            dbc.Row(
+                dbc.Col(card_benchmark_description, width=12), align="left"
+            ),
         ],
         class_name="mt-2",
         fluid="md",
     )
-    return page
 
 
 @callback(
@@ -93,14 +99,6 @@ def update_graf_benchmark(
 
 def get_benchmark_figure(al_object: ok.AssetList, plot_type: str, expanding_rolling: str, rolling_window: int):
     rolling_window = rolling_window * settings.MONTHS_PER_YEAR if expanding_rolling == "rolling" else None
-    titles = {
-        "td": "Tracking difference",
-        "annualized_td": "Annualized tracking difference",
-        "annual_td_bar": "Annual tracking difference",
-        "te": "Tracking Error",
-        "correlation": "Correlation",
-        "beta": "Beta coefficient"
-    }
     # Select Plot Type
     if plot_type == "td":
         df = al_object.tracking_difference(rolling_window=rolling_window) * 100
@@ -117,6 +115,14 @@ def get_benchmark_figure(al_object: ok.AssetList, plot_type: str, expanding_roll
 
     if plot_type != "annual_td_bar":
         ind = df.index.to_timestamp("M")
+        titles = {
+            "td": "Tracking difference",
+            "annualized_td": "Annualized tracking difference",
+            "annual_td_bar": "Annual tracking difference",
+            "te": "Tracking Error",
+            "correlation": "Correlation",
+            "beta": "Beta coefficient"
+        }
         fig = px.line(
             df,
             x=ind,

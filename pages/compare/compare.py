@@ -31,11 +31,14 @@ dash.register_page(
 
 
 def layout(tickers=None, first_date=None, last_date=None, ccy=None, **kwargs):
-    page = dbc.Container(
+    return dbc.Container(
         [
             dbc.Row(
                 [
-                    dbc.Col(card_controls(tickers, first_date, last_date, ccy), lg=7),
+                    dbc.Col(
+                        card_controls(tickers, first_date, last_date, ccy),
+                        lg=7,
+                    ),
                     dbc.Col(card_assets_info, lg=5),
                 ]
             ),
@@ -46,7 +49,6 @@ def layout(tickers=None, first_date=None, last_date=None, ccy=None, **kwargs):
         class_name="mt-2",
         fluid="md",
     )
-    return page
 
 
 @callback(
@@ -134,15 +136,18 @@ def get_al_figure(al_object: ok.AssetList, plot_type: str, inflation_on: bool, r
     # Select Plot Type
     if plot_type == "wealth":
         df = al_object.wealth_indexes
-    elif plot_type in ("cagr", "real_cagr"):
-        real = False if plot_type == "cagr" else True
+    elif plot_type in {"cagr", "real_cagr"}:
+        real = plot_type != "cagr"
         df = al_object.get_rolling_cagr(window=rolling_window * settings.MONTHS_PER_YEAR, real=real)
     elif plot_type == "correlation":
         matrix = al_object.assets_ror.corr()
         matrix = matrix.applymap("{:,.2f}".format)
-        fig = px.imshow(matrix, text_auto=True, aspect="equal", labels=dict(x="", y="", color=""))
-        return fig
-
+        return px.imshow(
+            matrix,
+            text_auto=True,
+            aspect="equal",
+            labels=dict(x="", y="", color=""),
+        )
     ind = df.index.to_timestamp("D")
     chart_first_date = ind[0]
     chart_last_date = ind[-1]

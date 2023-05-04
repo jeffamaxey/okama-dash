@@ -26,11 +26,16 @@ dash.register_page(
 
 def layout(tickers=None, first_date=None, last_date=None, ccy=None, **kwargs):
     tickers_list = make_list_from_string(tickers)
-    page = dbc.Container(
+    return dbc.Container(
         [
             dbc.Row(
                 [
-                    dbc.Col(card_controls(tickers_list, first_date, last_date, ccy), lg=7),
+                    dbc.Col(
+                        card_controls(
+                            tickers_list, first_date, last_date, ccy
+                        ),
+                        lg=7,
+                    ),
                     dbc.Col(card_ef_info, lg=5),
                 ]
             ),
@@ -56,7 +61,6 @@ def layout(tickers=None, first_date=None, last_date=None, ccy=None, **kwargs):
         class_name="mt-2",
         fluid="md",
     )
-    return page
 
 
 @callback(
@@ -119,7 +123,7 @@ def update_ef_cards(
     fig2, config2 = adopt_small_screens(fig2, screen)
 
     # Hide Transition map
-    transition_map_is_hidden = False if tr_map_option == "On" else True
+    transition_map_is_hidden = tr_map_option != "On"
     return fig1, fig2, config1, config2, transition_map_is_hidden
 
 

@@ -32,9 +32,13 @@ def db_search(n_clicks: int, text_to_search: str, namespace: str) -> dash_table.
         drop(columns=["ticker"], errors="ignore")
     )
     if search_df.empty:
-        output = "Not found in the database ..." if namespace == "ANY" else f"Not found in {namespace} namespace ..."
+        return (
+            "Not found in the database ..."
+            if namespace == "ANY"
+            else f"Not found in {namespace} namespace ..."
+        )
     else:
-        output = dash_table.DataTable(
+        return dash_table.DataTable(
             data=search_df.to_dict(orient="records"),
             style_data={
                 "whiteSpace": "normal",
@@ -42,4 +46,3 @@ def db_search(n_clicks: int, text_to_search: str, namespace: str) -> dash_table.
             },
             page_size=15,
         )
-    return output

@@ -28,7 +28,7 @@ def card_controls(
     last_date: Optional[str],
     ccy: Optional[str],
 ):
-    card = dbc.Card(
+    return dbc.Card(
         dbc.CardBody(
             [
                 html.H5("Efficient Frontier", className="card-title"),
@@ -37,7 +37,9 @@ def card_controls(
                         html.Label("Tickers in the Efficient Frontier"),
                         dcc.Dropdown(
                             options=options,
-                            value=tickers if tickers else settings.default_symbols,
+                            value=tickers
+                            if tickers
+                            else settings.default_symbols,
                             multi=True,
                             placeholder="Select assets",
                             id="ef-symbols-list",
@@ -65,7 +67,9 @@ def card_controls(
                                         html.Label("First Date"),
                                         dbc.Input(
                                             id="ef-first-date",
-                                            value=first_date if first_date else "2000-01",
+                                            value=first_date
+                                            if first_date
+                                            else "2000-01",
                                             type="text",
                                         ),
                                         dbc.FormText("Format: YYYY-MM"),
@@ -76,7 +80,9 @@ def card_controls(
                                         html.Label("Last Date"),
                                         dbc.Input(
                                             id="ef-last-date",
-                                            value=last_date if last_date else today_str,
+                                            value=last_date
+                                            if last_date
+                                            else today_str,
                                             type="text",
                                         ),
                                         dbc.FormText("Format: YYYY-MM"),
@@ -145,7 +151,10 @@ def card_controls(
                                         dbc.RadioItems(
                                             options=[
                                                 {"label": "On", "value": "On"},
-                                                {"label": "Off", "value": "Off"},
+                                                {
+                                                    "label": "Off",
+                                                    "value": "Off",
+                                                },
                                             ],
                                             value="Off",
                                             id="cml-option",
@@ -178,7 +187,9 @@ def card_controls(
                                             value=0,
                                             id="risk-free-rate-option",
                                         ),
-                                        dbc.FormText("0 - 100 (Format: XX.XX)"),
+                                        dbc.FormText(
+                                            "0 - 100 (Format: XX.XX)"
+                                        ),
                                         dbc.Tooltip(
                                             tl.ef_options_tooltip_rf_rate,
                                             target="info-rf-rate",
@@ -216,7 +227,8 @@ def card_controls(
                                         ),
                                         dbc.FormFeedback("", type="valid"),
                                         dbc.FormFeedback(
-                                            f"it should be an integer number ≤{settings.MC_MAX}", type="invalid"
+                                            f"it should be an integer number ≤{settings.MC_MAX}",
+                                            type="invalid",
                                         ),
                                     ],
                                     width=6,
@@ -274,7 +286,6 @@ def card_controls(
         ),
         class_name="mb-3",
     )
-    return card
 
 
 @callback(

@@ -46,18 +46,31 @@ def card_controls(
 ):
     tickers_list = make_list_from_string(tickers, char_type="str")
     weights_list = make_list_from_string(weights, char_type="float")
-    card = dbc.Card(
+    return dbc.Card(
         dbc.CardBody(
             [
                 html.H5("Investment Portfolio", className="card-title"),
                 html.Div(
                     [
-                        dbc.Row([dbc.Col(html.Label("Tickers")), dbc.Col(html.Label("Weights"))]),
+                        dbc.Row(
+                            [
+                                dbc.Col(html.Label("Tickers")),
+                                dbc.Col(html.Label("Weights")),
+                            ]
+                        ),
                         html.Div(id="dynamic-container", children=[]),
                         dbc.Row(
                             [
-                                dbc.Col(dbc.Button("Add Asset", id="dynamic-add-filter", n_clicks=0)),
-                                dbc.Col(html.Div(id="pf-portfolio-weights-sum")),
+                                dbc.Col(
+                                    dbc.Button(
+                                        "Add Asset",
+                                        id="dynamic-add-filter",
+                                        n_clicks=0,
+                                    )
+                                ),
+                                dbc.Col(
+                                    html.Div(id="pf-portfolio-weights-sum")
+                                ),
                             ]
                         ),
                     ],
@@ -90,8 +103,14 @@ def card_controls(
                                 dcc.Dropdown(
                                     options=[
                                         {"label": "Monthly", "value": "month"},
-                                        {"label": "Every year", "value": "year"},
-                                        {"label": "Not rebalanced", "value": "none"},
+                                        {
+                                            "label": "Every year",
+                                            "value": "year",
+                                        },
+                                        {
+                                            "label": "Not rebalanced",
+                                            "value": "none",
+                                        },
                                     ],
                                     value=rebal if rebal else "month",
                                     multi=False,
@@ -115,7 +134,9 @@ def card_controls(
                                         html.Label("First Date"),
                                         dbc.Input(
                                             id="pf-first-date",
-                                            value=first_date if first_date else "2000-01",
+                                            value=first_date
+                                            if first_date
+                                            else "2000-01",
                                             type="text",
                                         ),
                                         dbc.FormText("Format: YYYY-MM"),
@@ -126,7 +147,9 @@ def card_controls(
                                         html.Label("Last Date"),
                                         dbc.Input(
                                             id="pf-last-date",
-                                            value=last_date if last_date else today_str,
+                                            value=last_date
+                                            if last_date
+                                            else today_str,
                                             type="text",
                                         ),
                                         dbc.FormText("Format: YYYY-MM"),
@@ -159,9 +182,18 @@ def card_controls(
                                         ),
                                         dbc.RadioItems(
                                             options=[
-                                                {"label": "Wealth Index", "value": "wealth"},
-                                                {"label": "Rolling Cagr", "value": "cagr"},
-                                                {"label": "Rolling Real Cagr", "value": "real_cagr"},
+                                                {
+                                                    "label": "Wealth Index",
+                                                    "value": "wealth",
+                                                },
+                                                {
+                                                    "label": "Rolling Cagr",
+                                                    "value": "cagr",
+                                                },
+                                                {
+                                                    "label": "Rolling Real Cagr",
+                                                    "value": "real_cagr",
+                                                },
                                             ],
                                             value="wealth",
                                             id="pf-plot-option",
@@ -219,7 +251,9 @@ def card_controls(
                                             value=2,
                                             id="pf-rolling-window",
                                         ),
-                                        dbc.FormText("Format: number of years (≥ 1)"),
+                                        dbc.FormText(
+                                            "Format: number of years (≥ 1)"
+                                        ),
                                         dbc.Tooltip(
                                             pf_options_window,
                                             target="pf-info-rolling",
@@ -252,7 +286,6 @@ def card_controls(
         ),
         class_name="mb-3",
     )
-    return card
 
 
 @callback(
